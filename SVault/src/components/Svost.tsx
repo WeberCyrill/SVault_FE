@@ -10,10 +10,10 @@ function Svost(svostData: SvostResponse) {
                 <CardHeader  className="flex gap-3">
                     <Image
                         alt="nextui logo"
-                        height={40}
+                        height={25}
                         radius="sm"
                         src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                        width={40}
+                        width={25}
                     />
                     <div className="flex flex-col">
                         <p className="text-md">{svostData.peasant.name}</p>
