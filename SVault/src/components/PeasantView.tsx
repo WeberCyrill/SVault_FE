@@ -1,5 +1,4 @@
 import '../App.css'
-import {Image} from "@nextui-org/react";
 
 function PeasantView() {
 

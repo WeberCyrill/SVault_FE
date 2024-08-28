@@ -12,11 +12,11 @@ import {
 import {Formik, Field, Form} from "formik";
 import * as Yup from 'yup';
 
-interface myPropsType {
-    sendSearchResult: (value: SvostResponse) => void;
+interface postButtonProps {
+    saveNewPost: (value: SvostResponse) => void;
 }
 
-const PostButton: React.FC<myPropsType> = (sendSearchResult: myPropsType) => {
+const PostButton: React.FC<postButtonProps> = (saveNewPost: postButtonProps) => {
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
@@ -51,7 +51,7 @@ const PostButton: React.FC<myPropsType> = (sendSearchResult: myPropsType) => {
                                 validationSchema={validateSvost}
                                 onSubmit={(values) => {
                                     postNewPost(values.postContent).then((value) => {
-                                        sendSearchResult.sendSearchResult(value.data)
+                                        saveNewPost.saveNewPost(value.data)
                                     });
                                     onClose();
                                 }}

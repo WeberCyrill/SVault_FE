@@ -6,8 +6,6 @@ import {Button, Input} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import * as Yup from 'yup';
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 
 
