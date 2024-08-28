@@ -11,13 +11,12 @@ import {
 } from "@nextui-org/react";
 import {Formik, Field, Form} from "formik";
 import * as Yup from 'yup';
+import {useContext} from "react";
+import {PostContext} from "../Context/PostContext.tsx";
 
-interface postButtonProps {
-    saveNewPost: (value: SvostResponse) => void;
-}
+const PostButton = () => {
 
-const PostButton: React.FC<postButtonProps> = (saveNewPost: postButtonProps) => {
-
+    const {addSvost} = useContext(PostContext);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     const validateSvost = Yup.object().shape({
@@ -51,7 +50,7 @@ const PostButton: React.FC<postButtonProps> = (saveNewPost: postButtonProps) => 
                                 validationSchema={validateSvost}
                                 onSubmit={(values) => {
                                     postNewPost(values.postContent).then((value) => {
-                                        saveNewPost.saveNewPost(value.data)
+                                        addSvost(value.data)
                                     });
                                     onClose();
                                 }}

@@ -8,36 +8,27 @@ import {PostContext} from "../Context/PostContext.tsx";
 
 function SvostOverview() {
 
-    const svostList = useContext(PostContext);
-
-
-    const [svosts, setSvosts] = useState<SvostResponse[]>([]);
+    const { svosts, addSvosts} = useContext(PostContext);
 
     useEffect(() => {
         getAllSvosts()
             .then((value) => {
-                setSvosts(value.data);
+                addSvosts(value.data);
             })
     }, []);
-
-
-    const saveNewPost = (value: SvostResponse) => {
-        setSvosts([...svosts, value])
-    }
-
 
     const filterSvosts = (): void => {
         const filterdSvosts = [...svosts];
         switch (selectedValue) {
 
             case "likes":
-                setSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => svost2.postlike - svost1.postlike))
+                addSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => svost2.postlike - svost1.postlike))
                 break;
             case "oldest":
-                setSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => new Date(svost1.creationdate).getTime() - new Date(svost2.creationdate).getTime()))
+                addSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => new Date(svost1.creationdate).getTime() - new Date(svost2.creationdate).getTime()))
                 break;
             case "newest":
-                setSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => new Date(svost2.creationdate).getTime() - new Date(svost1.creationdate).getTime()))
+                addSvosts(filterdSvosts.sort((svost1: SvostResponse, svost2: SvostResponse) => new Date(svost2.creationdate).getTime() - new Date(svost1.creationdate).getTime()))
                 break;
         }
     }
@@ -81,7 +72,7 @@ function SvostOverview() {
             <div className="grid gap-9 justify-center ">
                 {svosts.map((svost) => (<Svost key={svost.id} {...svost} />))}
             </div>
-            <PostButton saveNewPost={saveNewPost}/>
+            <PostButton/>
         </>
     )
 }
