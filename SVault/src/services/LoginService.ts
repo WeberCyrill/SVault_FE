@@ -17,7 +17,7 @@ interface Authoritiy {
 
 
 export const accessUser = (name: string, password:string) => {
-   return axios.get<PeasantResponse>("http://localhost:8080/userdetails", {
+   return axios.get<PeasantResponse>("http://localhost:8080/user/detail", {
         headers: {
             'Authorization': 'Basic ' + btoa(name + ':' + password),
         }
