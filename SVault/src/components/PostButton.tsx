@@ -1,5 +1,5 @@
 import '../App.css';
-import {postNewPost, SvostResponse} from "../services/SvostService.ts";
+import {postNewPost} from "../services/SvostService.ts";
 import {
     Button,
     Modal,
