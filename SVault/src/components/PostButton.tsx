@@ -25,7 +25,7 @@ const PostButton = () => {
 
     return (
         <>
-            <div className="relative">
+            <div className="relative z-10">
                 <Button className="w-20 h-20 fixed bottom-10 right-10 rounded-3xl"
                         onClick={onOpen}>
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +37,7 @@ const PostButton = () => {
             </div>
 
             <Modal
+                backdrop="blur"
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center"

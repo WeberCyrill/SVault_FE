@@ -1,14 +1,21 @@
 import '../App.css'
 import {Button, Card, CardBody, CardHeader, Divider, Image} from "@nextui-org/react";
-import {SvostResponse} from "../services/SvostService.ts";
+import {addNewLike, removeLike, SvostResponse} from "../services/SvostService.ts";
+import {useContext} from "react";
+import {PostContext} from "../Context/PostContext.tsx";
 
-export interface SvostProps extends SvostResponse {
-    isLiked: boolean;
-}
+function Svost(svostData: SvostResponse) {
 
-function Svost(svostData: SvostProps) {
+    const {modifySvost} = useContext(PostContext);
 
     const toggleLike = () => {
+        if(svostData.liked) {
+            removeLike(svostData.id)
+            modifySvost({...svostData, liked: false, postlike: svostData.postlike - 1})
+        }else{
+            addNewLike(svostData.id)
+            modifySvost({...svostData, liked: true, postlike: svostData.postlike + 1})
+        }
 
     }
 
@@ -34,7 +41,7 @@ function Svost(svostData: SvostProps) {
                 <div className="text-ml pl-3">{svostData.content}</div>
             </CardBody>
             <div className="flex justify-end w-full pr-4 pb-2">
-                <Button isIconOnly variant="shadow" aria-label="like" className=" flex !gap-1 rounded-full w-12 text-black" color={ svostData.isLiked ? "danger" : "default"} onClick={toggleLike}>
+                <Button isIconOnly variant="shadow" aria-label="like" className=" flex !gap-1 rounded-full w-12 text-black" color={ svostData.liked ? "danger" : "default"} onClick={toggleLike}>
                     {svostData.postlike}
                     <svg xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 496 512"

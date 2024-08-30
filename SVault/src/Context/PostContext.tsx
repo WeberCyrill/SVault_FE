@@ -1,17 +1,21 @@
 import {createContext, useState} from "react";
-import {SvostProps} from "../components/Svost.tsx";
 import {SvostResponse} from "../services/SvostService.ts";
 
 export type PostContextState = {
-    svosts: SvostProps[];
+    svosts: SvostResponse[];
     addSvost: (value: SvostResponse) => void;
-    addSvosts: (value: SvostProps[]) => void;
+    addSvosts: (value: SvostResponse[]) => void;
+    modifySvost: (value: SvostResponse) => void;
 };
 
 const contextDefaultValues: PostContextState = {
     svosts: [],
-    addSvosts: () => {},
-    addSvost: () => {},
+    addSvosts: () => {
+    },
+    addSvost: () => {
+    },
+    modifySvost: () => {
+    },
 };
 
 export const PostContext =
@@ -19,11 +23,19 @@ export const PostContext =
 
 const PostProvider = ({children}) => {
 
-    const [svosts, setSvosts] = useState<SvostProps[]>([]);
-    const addSvost = (value: SvostResponse) => (setSvosts([...svosts, {...value, isLiked:false}]));
-    const addSvosts = (value: SvostProps[]) => (setSvosts(value));
+    const [svosts, setSvosts] = useState<SvostResponse[]>([]);
+    const addSvost = (value: SvostResponse) => (setSvosts([...svosts, {...value, liked: false}]));
+    const addSvosts = (value: SvostResponse[]) => (setSvosts(value));
+    const modifySvost = (value: SvostResponse) => {
+        const newSvosts: SvostResponse[] = svosts;
+        const targetSvost = svosts.findIndex((svostData) => (value.id === svostData.id))
+        console.log("H3ll")
+        newSvosts[targetSvost] = value;
+        setSvosts(newSvosts);
+        console.log(svosts);
+    };
 
-    return <PostContext.Provider value={{svosts, addSvosts, addSvost}}>
+    return <PostContext.Provider value={{svosts, addSvosts, addSvost, modifySvost}}>
         {children}
     </PostContext.Provider>
 }

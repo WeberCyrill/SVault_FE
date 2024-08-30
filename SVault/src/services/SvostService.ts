@@ -7,6 +7,7 @@ export interface SvostResponse {
     creationdate: string,
     postlike: number,
     peasant: PeasantResponse
+    liked: boolean
 }
 
 export const getAllSvosts = () => {
@@ -18,6 +19,11 @@ export const postNewPost = (content: string) => {
         "content": content})
 }
 
-export const getAllLikedSvosts = () => {
-    return axiosInstance.get<SvostResponse[]>("http://localhost:8080/svost/likedpost");
+export const addNewLike = (id: string) => {
+    return axiosInstance.post(`http://localhost:8080/svost/${id}/like`);
+}
+
+
+export const removeLike = (id: string) => {
+    return axiosInstance.delete(`http://localhost:8080/svost/${id}/like`);
 }
