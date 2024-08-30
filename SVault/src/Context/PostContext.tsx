@@ -29,10 +29,8 @@ const PostProvider = ({children}) => {
     const modifySvost = (value: SvostResponse) => {
         const newSvosts: SvostResponse[] = svosts;
         const targetSvost = svosts.findIndex((svostData) => (value.id === svostData.id))
-        console.log("H3ll")
         newSvosts[targetSvost] = value;
-        setSvosts(newSvosts);
-        console.log(svosts);
+        setSvosts([...newSvosts]);
     };
 
     return <PostContext.Provider value={{svosts, addSvosts, addSvost, modifySvost}}>
