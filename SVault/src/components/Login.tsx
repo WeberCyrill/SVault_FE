@@ -30,6 +30,7 @@ function Login() {
             onSubmit={(values, actions) => {
                 accessUser(values.username, values.password).then((response: AxiosResponse<PeasantResponse>) => {
                     if (response.status === 200) {
+                        console.log()
                         //    localStorage.setItem("user", JSON.stringify(response.data));
                         localStorage.setItem("token", btoa(response.data.name + ":" + response.data.password));
                         navigate("/svosts");

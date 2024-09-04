@@ -10,20 +10,40 @@ export interface SvostResponse {
     liked: boolean
 }
 
-export const getAllSvosts = () => {
-    return axiosInstance.get<SvostResponse[]>("http://localhost:8080/svost/");
+export interface PageResponse<T> {
+    totalPages: number;
+    totalElements: number,
+    pageable: {
+        pageNumber: number,
+        pageSize: number,
+        sort: {
+            sorted: boolean,
+            unsorted: boolean,
+            empty: boolean
+        },
+        offset: number,
+        paged: boolean,
+        unpaged: boolean
+    },
+    size: number,
+    content: T[]
+}
+
+export const getPaginatedSvosts = (offset: number, limit: number, sort?: string) => {
+    sort = sort == "" ? "" : "&filter=" + sort;
+    return axiosInstance.get<PageResponse<SvostResponse>>(`/svost/?offset=${offset}&limit=${limit}${sort}`, {});
 }
 
 export const postNewPost = (content: string) => {
-    return axiosInstance.post<SvostResponse>("http://localhost:8080/svost/", {
+    return axiosInstance.post<SvostResponse>("/svost/", {
         "content": content})
 }
 
 export const addNewLike = (id: string) => {
-    return axiosInstance.post(`http://localhost:8080/svost/${id}/like`);
+    return axiosInstance.post(`/svost/${id}/like`);
 }
 
 
 export const removeLike = (id: string) => {
-    return axiosInstance.delete(`http://localhost:8080/svost/${id}/like`);
+    return axiosInstance.delete(`/svost/${id}/like`);
 }
