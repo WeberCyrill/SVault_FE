@@ -29,9 +29,10 @@ export interface PageResponse<T> {
     content: T[]
 }
 
-export const getPaginatedSvosts = (offset: number, limit: number, sort?: string) => {
+export const getPaginatedSvosts = (offset: number, limit: number, sort?: string, searchterm?: string) => {
     sort = sort == "" ? "" : "&filter=" + sort;
-    return axiosInstance.get<PageResponse<SvostResponse>>(`/svost/?offset=${offset}&limit=${limit}${sort}`, {});
+    searchterm = searchterm == "" || searchterm == undefined ? "" : "&searchterm=" + searchterm;
+    return axiosInstance.get<PageResponse<SvostResponse>>(`/svost/?offset=${offset}&limit=${limit}${sort}${searchterm}`, {});
 }
 
 export const postNewPost = (content: string) => {

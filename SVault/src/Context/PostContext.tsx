@@ -1,5 +1,6 @@
 import {createContext, useState} from "react";
-import {SvostResponse} from "../services/SvostService.ts";
+import {PageResponse, SvostResponse} from "../services/SvostService.ts";
+import {boolean} from "yup";
 
 export type PostContextState = {
     svosts: SvostResponse[];
@@ -8,6 +9,12 @@ export type PostContextState = {
     modifySvost: (value: SvostResponse) => void;
     sort: string;
     setSort: (filter: string) => void;
+    currentPage: number;
+    setCurrentPage: (page: number) => void;
+    pageInfo: PageResponse<SvostResponse>;
+    setPageInfo: (pageInfo: PageResponse<SvostResponse>) => void;
+    isSearching: boolean;
+    setIsSearching: (isSearching: boolean) => void;
 };
 
 const contextDefaultValues: PostContextState = {
@@ -19,7 +26,33 @@ const contextDefaultValues: PostContextState = {
     modifySvost: () => {
     },
     sort: "",
-    setSort: () => {},
+    setSort: () => {
+    },
+    currentPage: 1,
+    setCurrentPage: () => {
+    },
+    pageInfo: {
+        totalPages: 0,
+        totalElements: 0,
+        pageable: {
+            pageNumber: 0,
+            pageSize: 0,
+            sort: {
+                sorted: false,
+                unsorted: true,
+                empty: true
+            },
+            offset: 0,
+            paged: false,
+            unpaged: true
+        },
+        size: 0,
+        content: []
+    },
+    setPageInfo: () => {},
+    isSearching: false,
+    setIsSearching: () => {},
+
 };
 
 export const PostContext =
@@ -38,9 +71,30 @@ const PostProvider = ({children}) => {
     };
 
 
+    const [isSearching, setIsSearching] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     const [sort, setSort] = useState<string>("");
 
-    return <PostContext.Provider value={{svosts, setSvosts, addSvost, modifySvost, sort, setSort: setSort}}>
+    const [pageInfo, setPageInfo] = useState<PageResponse<SvostResponse>>({
+        totalPages: 0,
+        totalElements: 0,
+        pageable: {
+            pageNumber: 0,
+            pageSize: 0,
+            sort: {
+                sorted: false,
+                unsorted: true,
+                empty: true
+            },
+            offset: 0,
+            paged: false,
+            unpaged: true
+        },
+        size: 0,
+        content: []
+    });
+
+    return <PostContext.Provider value={{svosts, setSvosts, addSvost, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, isSearching, setIsSearching}}>
         {children}
     </PostContext.Provider>
 }

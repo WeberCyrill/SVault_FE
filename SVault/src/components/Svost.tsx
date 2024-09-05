@@ -9,6 +9,7 @@ function Svost(svostData: SvostResponse) {
 
     const {modifySvost} = useContext(PostContext);
 
+
     const toggleLike = () => {
         if (svostData.liked) {
             removeLike(svostData.id)
