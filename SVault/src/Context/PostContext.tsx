@@ -1,8 +1,6 @@
 import {createContext, useState} from "react";
 import {getPaginatedSvosts, PageResponse, SvostResponse} from "../services/SvostService.ts";
 
-export const svostsPerPage: number = 10;
-
 export type PostContextState = {
     svosts: SvostResponse[];
     setSvosts: (value: SvostResponse[]) => void;
@@ -11,11 +9,11 @@ export type PostContextState = {
     setSort: (filter: string) => void;
     currentPage: number;
     setCurrentPage: (page: number) => void;
-    pageInfo: PageResponse<SvostResponse>;
-    setPageInfo: (pageInfo: PageResponse<SvostResponse>) => void;
     searchTerm: string;
     setSearchTerm: (searchTerm: string) => void;
-    search: (value: string, offset:number) => void;
+    search: (value: string, offset: number) => void;
+    pageInfo: PageResponse<SvostResponse>;
+    setPageInfo: (pageInfo: PageResponse<SvostResponse>) => void;
 };
 
 const contextDefaultValues: PostContextState = {
@@ -27,32 +25,45 @@ const contextDefaultValues: PostContextState = {
     sort: "",
     setSort: () => {
     },
-    setPageInfo: () => {},
-    searchTerm: "",
-    setSearchTerm: () => {},
-    search: () => {},
     currentPage: 1,
     setCurrentPage: () => {
+    },
+    searchTerm: "",
+    setSearchTerm: () => {
+    },
+    search: () => {
+    },
+    setPageInfo: () => {
     },
     pageInfo: {
         totalPages: 0,
         totalElements: 0,
         pageable: {
             pageNumber: 0,
-            pageSize: 0,
+            pageSize: 10,
             sort: {
                 sorted: false,
-                unsorted: true,
+                unsorted: false,
                 empty: true
             },
             offset: 0,
             paged: false,
-            unpaged: true
+            unpaged: false
         },
         size: 0,
-        content: []
-    },
+        content: [],
+        number: 0,
+        sort: {
+            sorted: false,
+            unsorted: false,
+            empty: true
+        },
+        numberOfElements: 0,
+        first: false,
+        last: false,
+        empty: true
 
+    },
 };
 
 export const PostContext =
@@ -62,12 +73,12 @@ const PostProvider = ({children}) => {
 
     const search = (value: string, offset: number) => {
         if (value == "" || value == null) {
-            getPaginatedSvosts(offset, svostsPerPage, sort).then((value) => {
+            getPaginatedSvosts(offset, pageInfo.pageable.pageSize, sort).then((value) => {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
             })
         } else {
-            getPaginatedSvosts(offset, svostsPerPage, sort, value).then((value) => {
+            getPaginatedSvosts(offset, pageInfo.pageable.pageSize, sort, value).then((value) => {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
             });
@@ -91,21 +102,45 @@ const PostProvider = ({children}) => {
         totalElements: 0,
         pageable: {
             pageNumber: 0,
-            pageSize: 0,
+            pageSize: 10,
             sort: {
                 sorted: false,
-                unsorted: true,
+                unsorted: false,
                 empty: true
             },
             offset: 0,
             paged: false,
-            unpaged: true
+            unpaged: false
         },
         size: 0,
-        content: []
+        content: [],
+        number: 0,
+        sort: {
+            sorted: false,
+            unsorted: false,
+            empty: true
+        },
+        numberOfElements: 0,
+        first: false,
+        last: false,
+        empty: true
+
     });
 
-    return <PostContext.Provider value={{svosts, setSvosts, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, searchTerm, setSearchTerm, search}}>
+    return <PostContext.Provider value={{
+        svosts,
+        setSvosts,
+        modifySvost,
+        sort,
+        setSort,
+        currentPage,
+        setCurrentPage,
+        pageInfo,
+        setPageInfo,
+        searchTerm,
+        setSearchTerm,
+        search
+    }}>
         {children}
     </PostContext.Provider>
 }

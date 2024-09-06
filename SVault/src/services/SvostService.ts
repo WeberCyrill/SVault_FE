@@ -27,6 +27,17 @@ export interface PageResponse<T> {
     },
     size: number,
     content: T[]
+    number: number,
+    sort: {
+        sorted: boolean,
+        unsorted: boolean,
+        empty: boolean
+    },
+    numberOfElements: number,
+    first: boolean,
+    last: boolean,
+    empty: boolean
+
 }
 
 export const getPaginatedSvosts = (offset: number, limit: number, sort?: string, searchterm?: string) => {
@@ -37,7 +48,8 @@ export const getPaginatedSvosts = (offset: number, limit: number, sort?: string,
 
 export const postNewSvost = (content: string) => {
     return axiosInstance.post<SvostResponse>("/svost/", {
-        "content": content})
+        "content": content
+    })
 }
 
 export const addNewLike = (id: string) => {

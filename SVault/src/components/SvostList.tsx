@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import {getPaginatedSvosts} from "../services/SvostService.ts";
-import {PostContext, svostsPerPage} from "../Context/PostContext.tsx";
+import {PostContext} from "../Context/PostContext.tsx";
 import {Skeleton} from "@nextui-org/react";
 import Svost from "./Svost.tsx";
 import {useNavigate} from "react-router-dom";
@@ -13,6 +13,7 @@ function SvostList() {
         sort,
         currentPage,
         setPageInfo,
+        pageInfo,
         search,
         searchTerm
     } = useContext(PostContext);
@@ -23,7 +24,7 @@ function SvostList() {
     useEffect(() => {
         setIsLoaded(false);
         if (searchTerm === null || searchTerm === "" || searchTerm === undefined ) {
-            getPaginatedSvosts(currentPage - 1, svostsPerPage, sort).then((value) => {
+            getPaginatedSvosts(currentPage - 1, pageInfo.pageable.pageSize, sort).then((value) => {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
                 setIsLoaded(true);
@@ -43,7 +44,7 @@ function SvostList() {
                     </div>
                 ) : (
                     <div className="grid gap-9 justify-center">
-                        {Array.from({length: svostsPerPage}).map((_, index) => (
+                        {Array.from({length: pageInfo.pageable.pageSize}).map((_, index) => (
                             <Skeleton key={index} isLoaded={false} className="w-[75vw] h-44 rounded-xl"/>
                         ))}
                     </div>
