@@ -3,6 +3,7 @@ import {getPaginatedSvosts} from "../services/SvostService.ts";
 import {PostContext, svostsPerPage} from "../Context/PostContext.tsx";
 import {Skeleton} from "@nextui-org/react";
 import Svost from "./Svost.tsx";
+import {useNavigate} from "react-router-dom";
 
 function SvostList() {
 
@@ -16,6 +17,7 @@ function SvostList() {
         searchTerm
     } = useContext(PostContext);
 
+    const navigate = useNavigate()
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
     useEffect(() => {
@@ -25,7 +27,7 @@ function SvostList() {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
                 setIsLoaded(true);
-            })
+            }).catch(() => {navigate("/login")})
         } else {
             search(searchTerm, currentPage - 1)
             setIsLoaded(true);

@@ -18,7 +18,7 @@ import {PlusIcon} from "../assets/svg/PlusIcon.tsx";
 const PostButton = () => {
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const {setSvosts, svosts} = useContext(PostContext);
+    const {setSvosts, svosts, currentPage, setCurrentPage, setSort} = useContext(PostContext);
 
     const validateSvost = Yup.object().shape({
         svostContent: Yup.string().max(4000, 'Your Post ist to long! (max 4000)').required("Required"),
@@ -48,7 +48,11 @@ const PostButton = () => {
                                 validationSchema={validateSvost}
                                 onSubmit={(values) => {
                                     postNewSvost(values.svostContent).then((value) => {
-                                        setSvosts([...svosts, {...value.data, liked: false}])
+                                        if (currentPage == 1){
+                                        setSvosts([{...value.data, liked: false}, ...svosts])
+                                        }
+                                        setCurrentPage(1)
+                                        setSort("creationdate_desc")
                                     });
                                     onClose();
                                 }}

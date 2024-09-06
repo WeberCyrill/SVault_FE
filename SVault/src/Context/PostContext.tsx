@@ -5,7 +5,6 @@ export const svostsPerPage: number = 10;
 
 export type PostContextState = {
     svosts: SvostResponse[];
-    addSvost: (value: SvostResponse) => void;
     setSvosts: (value: SvostResponse[]) => void;
     modifySvost: (value: SvostResponse) => void;
     sort: string;
@@ -14,8 +13,6 @@ export type PostContextState = {
     setCurrentPage: (page: number) => void;
     pageInfo: PageResponse<SvostResponse>;
     setPageInfo: (pageInfo: PageResponse<SvostResponse>) => void;
-    isSearching: boolean;
-    setIsSearching: (isSearching: boolean) => void;
     searchTerm: string;
     setSearchTerm: (searchTerm: string) => void;
     search: (value: string, offset:number) => void;
@@ -25,13 +22,15 @@ const contextDefaultValues: PostContextState = {
     svosts: [],
     setSvosts: () => {
     },
-    addSvost: () => {
-    },
     modifySvost: () => {
     },
     sort: "",
     setSort: () => {
     },
+    setPageInfo: () => {},
+    searchTerm: "",
+    setSearchTerm: () => {},
+    search: () => {},
     currentPage: 1,
     setCurrentPage: () => {
     },
@@ -53,12 +52,6 @@ const contextDefaultValues: PostContextState = {
         size: 0,
         content: []
     },
-    setPageInfo: () => {},
-    isSearching: false,
-    setIsSearching: () => {},
-    searchTerm: "",
-    setSearchTerm: () => {},
-    search: () => {}
 
 };
 
@@ -72,10 +65,8 @@ const PostProvider = ({children}) => {
             getPaginatedSvosts(offset, svostsPerPage, sort).then((value) => {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
-                setIsSearching(false);
             })
         } else {
-            setIsSearching(true);
             getPaginatedSvosts(offset, svostsPerPage, sort, value).then((value) => {
                 setSvosts(value.data.content);
                 setPageInfo(value.data)
@@ -84,8 +75,6 @@ const PostProvider = ({children}) => {
     }
 
     const [svosts, setSvosts] = useState<SvostResponse[]>([]);
-
-    const addSvost = (value: SvostResponse) => (setSvosts([...svosts, {...value, liked: false}]));
     const modifySvost = (value: SvostResponse) => {
         const newSvosts: SvostResponse[] = svosts;
         const targetIndex = svosts.findIndex((svostData) => (value.id === svostData.id))
@@ -93,9 +82,8 @@ const PostProvider = ({children}) => {
         setSvosts([...newSvosts]);
     };
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [sort, setSort] = useState<string>("");
 
     const [pageInfo, setPageInfo] = useState<PageResponse<SvostResponse>>({
@@ -117,7 +105,7 @@ const PostProvider = ({children}) => {
         content: []
     });
 
-    return <PostContext.Provider value={{svosts, setSvosts, addSvost, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, isSearching, setIsSearching, searchTerm, setSearchTerm, search}}>
+    return <PostContext.Provider value={{svosts, setSvosts, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, searchTerm, setSearchTerm, search}}>
         {children}
     </PostContext.Provider>
 }
