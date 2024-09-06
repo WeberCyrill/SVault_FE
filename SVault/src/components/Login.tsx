@@ -13,30 +13,32 @@ import {EyeIcon} from "../assets/svg/EyeIcon.tsx";
 function Login() {
 
     const navigate = useNavigate();
-    const [isInvalid, setIsInvalid] = useState(false);
+
+    const [isValidCredentials, setIsValidCredentials] = useState(true);
+
     const [isVisible, setIsVisible] = useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
     const loginValidationSchema = Yup.object().shape({
         username: Yup.string().required("Required"),
         password: Yup.string().required("Required")
     })
 
-    const toggleVisibility = () => setIsVisible(!isVisible);
 
     return (
         <Formik
+            validateOnChange={false}
+            validateOnBlur={false}
             initialValues={{username: "", password: ""}}
             validationSchema={loginValidationSchema}
             onSubmit={(values, actions) => {
                 accessUser(values.username, values.password).then((response: AxiosResponse<PeasantResponse>) => {
                     if (response.status === 200) {
-                        console.log()
-                        //    localStorage.setItem("user", JSON.stringify(response.data));
                         localStorage.setItem("token", btoa(response.data.name + ":" + response.data.password));
-                        navigate("/svosts");
+                        navigate("/home");
                     }
                 }).catch(() => {
-                    setIsInvalid(true)
+                    setIsValidCredentials(false)
                 }).finally(() => {
                     actions.setSubmitting(false)
                 });
@@ -45,7 +47,6 @@ function Login() {
             {({isSubmitting, errors, isValid}) => (
                 <Form className=" flex flex-col items-center just3ify-center h-[80vh] gap-5">
                     <h1 className="text-3xl font-bold">Login</h1>
-
                     <Field name="username">
                         {({field}) => (
                             <Input
@@ -55,7 +56,7 @@ function Login() {
                                 label="Username"
                                 name="username"
                                 className="max-w-xs "
-                                isInvalid={isInvalid}
+                                isInvalid={!isValid || !isValidCredentials}
                                 errorMessage={errors.username}
                             />
                         )}
@@ -67,11 +68,11 @@ function Login() {
                                 isRequired
                                 label="Password"
                                 name="password"
-                                className="max-w-xs"
-                                isInvalid={isInvalid || !isValid}
+                                className="max-w-xs "
+                                isInvalid={!isValid || !isValidCredentials}
                                 errorMessage={errors.password}
                                 endContent={
-                                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}
+                                    <button type="button" onClick={toggleVisibility}
                                             aria-label="toggle password visibility">
                                         {isVisible ? (
                                             <EyeSlashIcon className="text-2xl text-default-400 pointer-events-none"/>

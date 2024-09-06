@@ -31,11 +31,11 @@ export interface PageResponse<T> {
 
 export const getPaginatedSvosts = (offset: number, limit: number, sort?: string, searchterm?: string) => {
     sort = sort == "" ? "" : "&filter=" + sort;
-    searchterm = searchterm == "" || searchterm == undefined ? "" : "&searchterm=" + searchterm;
+    searchterm = (searchterm == "" || searchterm == undefined) ? "" : "&searchterm=" + searchterm;
     return axiosInstance.get<PageResponse<SvostResponse>>(`/svost/?offset=${offset}&limit=${limit}${sort}${searchterm}`, {});
 }
 
-export const postNewPost = (content: string) => {
+export const postNewSvost = (content: string) => {
     return axiosInstance.post<SvostResponse>("/svost/", {
         "content": content})
 }

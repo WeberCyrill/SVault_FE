@@ -22,7 +22,7 @@ function Svost(svostData: SvostResponse) {
     }
 
     return (
-        <Card className="max-w-[90vw] min-w-[75vw]">
+        <Card className="w-full">
             <CardHeader className="flex gap-3">
                 <Image
                     alt="nextui logo"
@@ -44,10 +44,10 @@ function Svost(svostData: SvostResponse) {
             </CardBody>
             <div className="flex justify-end w-full pr-4 pb-2">
                 <Button isIconOnly variant="shadow" aria-label="like"
-                        className=" flex !gap-1 rounded-full w-12 text-black"
+                        className="flex !gap-1 rounded-full w-12 text-black"
                         color={svostData.liked ? "danger" : "default"} onClick={toggleLike}>
                     {svostData.postlike}
-                    <RoundedLike className = "w-5 h-5 "/>
+                    <RoundedLike className="w-5 h-5"/>
                 </Button>
             </div>
         </Card>

@@ -1,6 +1,7 @@
 import {createContext, useState} from "react";
-import {PageResponse, SvostResponse} from "../services/SvostService.ts";
-import {boolean} from "yup";
+import {getPaginatedSvosts, PageResponse, SvostResponse} from "../services/SvostService.ts";
+
+export const svostsPerPage: number = 10;
 
 export type PostContextState = {
     svosts: SvostResponse[];
@@ -15,6 +16,9 @@ export type PostContextState = {
     setPageInfo: (pageInfo: PageResponse<SvostResponse>) => void;
     isSearching: boolean;
     setIsSearching: (isSearching: boolean) => void;
+    searchTerm: string;
+    setSearchTerm: (searchTerm: string) => void;
+    search: (value: string, offset:number) => void;
 };
 
 const contextDefaultValues: PostContextState = {
@@ -52,6 +56,9 @@ const contextDefaultValues: PostContextState = {
     setPageInfo: () => {},
     isSearching: false,
     setIsSearching: () => {},
+    searchTerm: "",
+    setSearchTerm: () => {},
+    search: () => {}
 
 };
 
@@ -59,6 +66,22 @@ export const PostContext =
     createContext<PostContextState>(contextDefaultValues);
 
 const PostProvider = ({children}) => {
+
+    const search = (value: string, offset: number) => {
+        if (value == "" || value == null) {
+            getPaginatedSvosts(offset, svostsPerPage, sort).then((value) => {
+                setSvosts(value.data.content);
+                setPageInfo(value.data)
+                setIsSearching(false);
+            })
+        } else {
+            setIsSearching(true);
+            getPaginatedSvosts(offset, svostsPerPage, sort, value).then((value) => {
+                setSvosts(value.data.content);
+                setPageInfo(value.data)
+            });
+        }
+    }
 
     const [svosts, setSvosts] = useState<SvostResponse[]>([]);
 
@@ -70,7 +93,7 @@ const PostProvider = ({children}) => {
         setSvosts([...newSvosts]);
     };
 
-
+    const [searchTerm, setSearchTerm] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [sort, setSort] = useState<string>("");
@@ -94,7 +117,7 @@ const PostProvider = ({children}) => {
         content: []
     });
 
-    return <PostContext.Provider value={{svosts, setSvosts, addSvost, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, isSearching, setIsSearching}}>
+    return <PostContext.Provider value={{svosts, setSvosts, addSvost, modifySvost, sort, setSort: setSort, currentPage, setCurrentPage, pageInfo, setPageInfo, isSearching, setIsSearching, searchTerm, setSearchTerm, search}}>
         {children}
     </PostContext.Provider>
 }

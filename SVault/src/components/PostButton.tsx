@@ -1,5 +1,5 @@
 import '../App.css';
-import {postNewPost} from "../services/SvostService.ts";
+import {postNewSvost} from "../services/SvostService.ts";
 import {
     Button,
     Modal,
@@ -17,18 +17,19 @@ import {PlusIcon} from "../assets/svg/PlusIcon.tsx";
 
 const PostButton = () => {
 
-    const {addSvost} = useContext(PostContext);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const {setSvosts, svosts} = useContext(PostContext);
 
     const validateSvost = Yup.object().shape({
-        postContent: Yup.string().max(4000, 'Your Post ist to long! (max 4000)').required("Required"),
+        svostContent: Yup.string().max(4000, 'Your Post ist to long! (max 4000)').required("Required"),
     })
 
     return (
         <>
-            <div className="relative z-10">
-                <Button className="w-20 h-20 fixed bottom-10 right-10 rounded-3xl"
-                        onClick={onOpen}>
+            <div className="relative z-30">
+                <Button
+                    className="w-20 h-20 fixed md:bottom-10 bottom-20 right-8 rounded-3xl data-[hover=true]:opacity-100"
+                    onClick={onOpen}>
                     <PlusIcon/>
                 </Button>
             </div>
@@ -43,11 +44,11 @@ const PostButton = () => {
                         <>
                             <ModalHeader className="flex flex-col gap-1">New Post</ModalHeader>
                             <Formik
-                                initialValues={{postContent: ''}}
+                                initialValues={{svostContent: ''}}
                                 validationSchema={validateSvost}
                                 onSubmit={(values) => {
-                                    postNewPost(values.postContent).then((value) => {
-                                        addSvost(value.data)
+                                    postNewSvost(values.svostContent).then((value) => {
+                                        setSvosts([...svosts, {...value.data, liked: false}])
                                     });
                                     onClose();
                                 }}
@@ -55,7 +56,7 @@ const PostButton = () => {
                                 {({handleSubmit, isValid, errors}) => (
                                     <Form onSubmit={handleSubmit}>
                                         <ModalBody>
-                                            <Field name="postContent">
+                                            <Field name="svostContent">
                                                 {({field}) => (
                                                     <Textarea
                                                         {...field}
@@ -63,7 +64,8 @@ const PostButton = () => {
                                                         placeholder="Write something"
                                                         minRows={10}
                                                         isInvalid={!isValid}
-                                                        errorMessage={errors.postContent}
+                                                        errorMessage={errors.svostContent}
+                                                        spellCheck
                                                     />
                                                 )}
                                             </Field>
