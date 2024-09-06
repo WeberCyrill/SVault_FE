@@ -25,7 +25,7 @@ function Sort() {
         <div className="z-30 items-end content-end justify-end ">
             <Dropdown>
                 <DropdownTrigger>
-                    <Button className=" min-w-0 data-[hover=true]:opacity-100 aria-expanded:opacity-100">
+                    <Button className=" min-w-0 md:data-[hover=true]:opacity-100 aria-expanded:opacity-100">
                         <p className="hidden md:block">Sort</p>
                         <FilterIcon className="h-5 w-5"/>
                     </Button>

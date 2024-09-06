@@ -28,7 +28,7 @@ const PostButton = () => {
         <>
             <div className="relative z-30">
                 <Button
-                    className="w-20 h-20 fixed md:bottom-10 bottom-20 right-8 rounded-3xl data-[hover=true]:opacity-100"
+                    className=" min-w-0 w-16 h-16 md:h-20 md:w-20 fixed md:bottom-10 bottom-20 right-8 md:rounded-3xl rounded-2xl data-[hover=true]:opacity-100"
                     onClick={onOpen}>
                     <PlusIcon/>
                 </Button>
@@ -64,7 +64,6 @@ const PostButton = () => {
                                                 {({field}) => (
                                                     <Textarea
                                                         {...field}
-                                                        label=""
                                                         placeholder="Write something"
                                                         minRows={10}
                                                         isInvalid={!isValid}

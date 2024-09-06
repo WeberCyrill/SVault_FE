@@ -1,5 +1,5 @@
 import '../App.css'
-import {Avatar, Button, Card, CardBody, CardHeader, Divider} from "@nextui-org/react";
+import {Avatar, Button, Card, CardBody, CardHeader, Divider, User} from "@nextui-org/react";
 import {addNewLike, removeLike, SvostResponse} from "../services/SvostService.ts";
 import {useContext} from "react";
 import {PostContext} from "../Context/PostContext.tsx";
@@ -24,15 +24,14 @@ function Svost(svostData: SvostResponse) {
     return (
         <Card className="w-full">
             <CardHeader className="flex gap-3">
-                <Avatar showFallback
-                        className="min-w-10"
-                        size="md"
-                        radius="lg"
-                        src={svostData.peasant.profilepicture}
-                />
-                <div className="flex flex-col">
-                    <p className="text-ml">{svostData.peasant.name}</p>
-                </div>
+                <User
+                    name={svostData.peasant.name}
+                    description={svostData.peasant.email}
+                    avatarProps={{
+                        src: svostData.peasant.profilepicture,
+                        radius: "md",
+                        showFallback: true,
+                }}/>
                 <div className="flex justify-end w-full">
                     <p className="text-sm">{new Date(svostData.creationdate).toDateString()}</p>
                 </div>
