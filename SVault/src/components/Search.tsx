@@ -5,7 +5,7 @@ import {PostContext} from "../Context/PostContext.tsx";
 
 function Search() {
 
-    const {search, setSearchTerm, searchTerm} = useContext(PostContext);
+    const {search, setSearchTerm, searchTerm, setCurrentPage} = useContext(PostContext);
 
     return (
         <Input
@@ -13,8 +13,10 @@ function Search() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={(e) => {
-                if (e.key === "Enter")
+                if (e.key === "Enter"){
                     search(searchTerm, 0);
+                    setCurrentPage(1);
+                }
             }}
             endContent={<SearchIcon/>}
         />

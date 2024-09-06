@@ -3,6 +3,7 @@ import axios from "axios";
 export interface PeasantResponse {
     "name": string,
     "password": string,
+    "profilepicture": string,
     "email": string,
     "role": {
         "name": string,

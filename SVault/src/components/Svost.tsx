@@ -1,5 +1,5 @@
 import '../App.css'
-import {Button, Card, CardBody, CardHeader, Divider, Image} from "@nextui-org/react";
+import {Avatar, Button, Card, CardBody, CardHeader, Divider} from "@nextui-org/react";
 import {addNewLike, removeLike, SvostResponse} from "../services/SvostService.ts";
 import {useContext} from "react";
 import {PostContext} from "../Context/PostContext.tsx";
@@ -24,12 +24,11 @@ function Svost(svostData: SvostResponse) {
     return (
         <Card className="w-full">
             <CardHeader className="flex gap-3">
-                <Image
-                    alt="nextui logo"
-                    height={25}
-                    radius="sm"
-                    src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-                    width={30}
+                <Avatar showFallback
+                        className="min-w-10"
+                        size="md"
+                        radius="lg"
+                        src={svostData.peasant.profilepicture}
                 />
                 <div className="flex flex-col">
                     <p className="text-ml">{svostData.peasant.name}</p>
